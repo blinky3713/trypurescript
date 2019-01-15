@@ -13,3 +13,17 @@ cabal.sandbox.config
 *.chi
 *.chs.h
 *.lksh*
+
+/bower_components/
+/node_modules/
+/.pulp-cache/
+/output/
+/generated-docs/
+/.psc-package/
+/.psc*
+/.purs*
+/.psa*
+/js/
+package-lock.json
+/.stack*
+>>>>>>> martin-self-hosting
