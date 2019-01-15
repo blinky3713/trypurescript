@@ -2,6 +2,7 @@ module Main where
 
 import Prelude
 
+import Config as Config
 import Control.Monad.Cont.Trans (ContT(..), runContT)
 import Control.Monad.Except.Trans (runExceptT)
 import Data.Array (mapMaybe)
@@ -18,6 +19,7 @@ import Data.String.Regex.Flags (global)
 import Data.String.Regex.Unsafe (unsafeRegex)
 import Effect (Effect)
 import Effect.Console (error)
+import Effect.Console as C
 import Effect.Timer (setTimeout)
 import Effect.Uncurried (EffectFn1, EffectFn2, EffectFn3, EffectFn5, mkEffectFn1, runEffectFn1, runEffectFn2, runEffectFn3, runEffectFn5)
 import Foreign (renderForeignError)
@@ -33,6 +35,9 @@ import Try.Types (JS(..))
 import Web.HTML (window)
 import Web.HTML.Location (setHref)
 import Web.HTML.Window (alert, confirm, location)
+
+url :: String
+url = "http://" <> Config.config.url
 
 displayLoadingMessage :: Effect Unit
 displayLoadingMessage = JQuery.select "#loading" >>= JQueryExtras.fadeIn
@@ -275,9 +280,9 @@ withSession sessionId k = do
   state <- tryRetrieveSession sessionId
   case state of
     Just { code, backend } -> do
-      k { code, backend: API.getBackendConfigFromString backend }
+      k { code, backend: API.getBackendConfigFromString backend url}
     Nothing -> do
-      bc@(BackendConfig backend) <- API.getBackendConfigFromString <<< fromMaybe "core" <$> getQueryStringMaybe "backend"
+      bc@(BackendConfig backend) <- flip API.getBackendConfigFromString url <<< fromMaybe "core" <$> getQueryStringMaybe "backend"
       gist <- fromMaybe backend.mainGist <$> getQueryStringMaybe "gist"
       loadFromGist gist bc k
 
@@ -346,7 +351,7 @@ setupBackendMenu :: BackendConfig -> Effect Unit
 setupBackendMenu bc@(BackendConfig backend) = do
   JQuery.select ("#backend_" <> backend.backend) >>= JQuery.attr { checked: "checked" }
   JQuery.select "input[name=backend_inputs]" >>= JQuery.on "change" \e jq -> do
-    bc_@(BackendConfig newBackend) <- getBackendConfigFromString <<< fromMaybe "core" <$> JQueryExtras.getValueMaybe jq
+    bc_@(BackendConfig newBackend) <- flip getBackendConfigFromString url <<< fromMaybe "core" <$> JQueryExtras.getValueMaybe jq
 
     ok <- window >>= confirm ("Replace your current code with the " <> newBackend.backend <> " backend sample code?")
     if ok
@@ -357,6 +362,7 @@ setupBackendMenu bc@(BackendConfig backend) = do
 
 main :: Effect Unit
 main = JQuery.ready do
+  C.log url
   JQuery.select "input[name=view_mode]" >>= JQuery.on "change" \_ jq -> do
     viewMode <- JQueryExtras.filter jq ":checked" >>= JQueryExtras.getValueMaybe
     changeViewMode viewMode

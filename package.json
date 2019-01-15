@@ -9,6 +9,9 @@
     "pulp": "^12.3.1",
     "purescript-psa": "^0.7.3 ",
     "purescript": "^0.12.1",
-    "rimraf": "^2.5.4"
+    "rimraf": "^2.5.4",
+    "webpack": "^4.26.0",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.14"
   }
 }

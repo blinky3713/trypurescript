@@ -23,7 +23,7 @@ cabal.sandbox.config
 /.psc*
 /.purs*
 /.psa*
-/js/
+js/index.js
 package-lock.json
 /.stack*
 >>>>>>> martin-self-hosting
