@@ -1,7 +1,8 @@
-resolver: lts-8.5
+resolver: lts-12.5
 flags: {}
 packages:
 - '.'
 extra-deps:
-- purescript-0.11.7
+- purescript-0.12.1
 - pipes-http-1.0.5
+- mtl-2.2.1@sha256:4b5a800fe9edf168fc7ae48c7a3fc2aab6b418ac15be2f1dad43c0f48a494a3b
