@@ -235,8 +235,8 @@ getBackendConfig be url = case be of
     , mainGist: "b57a766d417e109785540d584266fc33"
     , extra_styling: ""
     , extra_body: ""
-    , compile: compile $ url <> "/try"
-    , getBundle: getDefaultBundle $ url <> "/try"
+    , compile: compile $ url
+    , getBundle: getDefaultBundle $ url
     }
   Thermite ->  BackendConfig
     { backend: "thermite"
