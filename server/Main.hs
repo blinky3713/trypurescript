@@ -167,8 +167,11 @@ main = do
   inputFiles <- concat <$> traverse glob inputGlobs
   let onError f = either (Left . f) Right
   e <- runExceptT $ do
+    liftIO $ putStrLn "loading modules"
     modules <- ExceptT (fmap (onError Right) (I.loadAllModules inputFiles))
+    liftIO $ putStrLn "runMake"
     (exts, env) <- ExceptT . fmap (onError Right) . I.runMake . I.make $ modules
+    liftIO $ putStrLn "bundle"
     js <- ExceptT (fmap (onError Left) bundle)
     return (fromString js, exts, env)
   case e of
