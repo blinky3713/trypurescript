@@ -1,7 +1,7 @@
 {
     "name": "trybehaviors",
-    "set": "master",
-    "source": "https://github.com/purescript/package-sets.git",
+    "set": "try-behaviors-2019016",
+    "source": "https://github.com/blinky3713/try-behaviors-package-set",
     "depends": [
         "drawing",
         "behaviors",

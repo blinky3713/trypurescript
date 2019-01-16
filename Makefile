@@ -7,7 +7,8 @@ SERVER_PORT ?= 8081
 SERVER_HOST ?= localhost
 SERVER_BASE_URL ?= $(SERVER_HOST):$(SERVER_PORT)
 
-PS_DIR ?=  "./staging/core/.psc-package/psc-0.12.1/*/*/src/**/*.purs"
+BACKEND ?= core
+PS_DIRS ?=  "./staging/$(BACKEND)/.psc-package/*/*/*/src/**/*.purs"
 
 help: ## Ask for help!
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
@@ -31,4 +32,4 @@ server-install: ## install the server executables
 	stack install
 
 server-run: ## run the server
-	stack install; stack exec -- trypurescript $(SERVER_PORT) $(PS_DIR)
+	stack install; stack exec -- trypurescript $(SERVER_PORT) $(PS_DIRS)

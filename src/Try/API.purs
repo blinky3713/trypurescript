@@ -20,7 +20,7 @@ import Control.Monad.Cont.Trans (ContT(ContT))
 import Control.Monad.Except (runExcept)
 import Control.Monad.Except.Trans (ExceptT(ExceptT))
 import Control.Parallel (parTraverse)
-import Data.Array (fold, intercalate)
+import Data.Array (intercalate)
 import Data.Either (Either(..))
 import Data.Generic.Rep (class Generic)
 import Data.List.NonEmpty (NonEmptyList)
@@ -203,27 +203,18 @@ newtype BackendConfig = BackendConfig
 
 data Backend
   = Core
-  | Thermite
-  | Slides
-  | Mathbox
+  | Halogen
   | Behaviors
-  | Flare
 
 backendFromString :: Partial => String -> Backend
 backendFromString "core"      = Core
-backendFromString "thermite"  = Thermite
-backendFromString "slides"    = Slides
-backendFromString "mathbox"   = Mathbox
+backendFromString "halogen"  = Halogen
 backendFromString "behaviors" = Behaviors
-backendFromString "flare"     = Flare
 
 backendToString :: Backend -> String
 backendToString Core      = "core"
-backendToString Thermite  = "thermite"
-backendToString Slides    = "slides"
-backendToString Mathbox   = "mathbox"
+backendToString Halogen  = "halogen"
 backendToString Behaviors = "behaviors"
-backendToString Flare     = "flare"
 
 derive instance eqBackend :: Eq Backend
 derive instance ordBackend :: Ord Backend
@@ -232,59 +223,27 @@ getBackendConfig :: Backend -> String -> BackendConfig
 getBackendConfig be url = case be of
   Core -> BackendConfig
     { backend: "core"
-    , mainGist: "b57a766d417e109785540d584266fc33"
+    , mainGist: "cf77cdb33df8760d4648be0552654982"
     , extra_styling: ""
     , extra_body: ""
-    , compile: compile $ url
-    , getBundle: getDefaultBundle $ url
+    , compile: compile url
+    , getBundle: getDefaultBundle url
     }
-  Thermite ->  BackendConfig
-    { backend: "thermite"
-    , mainGist: "85383bb058471109cfef379bbb6bc11c"
+  Halogen ->  BackendConfig
+    { backend: "halogen"
+    , mainGist: "cf77cdb33df8760d4648be0552654982"
     , extra_styling: """<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">"""
     , extra_body: """<div id="app"></div>"""
-    , compile: compile $ url <> "/thermite"
-    , getBundle: getThermiteBundle $ url <> "/thermite"
-    }
-  Slides -> BackendConfig
-    { backend: "slides"
-    , mainGist: "c62b5778a6a5f2bcd32dd97b294c068a"
-    , extra_styling: """<link rel="stylesheet" href="css/slides.css">"""
-    , extra_body: """<div id="main"></div>"""
-    , compile: compile $ url <> "/slides"
-    , getBundle: getDefaultBundle $ url <> "/slides"
-    }
-  Mathbox -> BackendConfig
-    { backend: "mathbox"
-    , mainGist: "81f8bb3261b9c819d677de2ea54a4d2e"
-    , extra_styling: fold
-        [ """<script src="js/mathbox-bundle.js"></script>"""
-        , """<link rel="stylesheet" href="css/mathbox.css">"""
-        ]
-    , extra_body: ""
-    , compile: compile $ url <> "/purescript-mathbox"
-    , getBundle: getDefaultBundle $ url <> "/purescript-mathbox"
+    , compile: compile url
+    , getBundle: getThermiteBundle url
     }
   Behaviors -> BackendConfig
     { backend: "behaviors"
-    , mainGist: "ff1e87f0872d2d891e77d209d8f7706d"
+    , mainGist: "cf77cdb33df8760d4648be0552654982"
     , extra_styling: ""
     , extra_body: """<canvas id="canvas" width="800" height="600"></canvas>"""
-    , compile: compile $ url <> "/behaviors"
-    , getBundle: getDefaultBundle $ url <> "/behaviors"
-    }
-  Flare -> BackendConfig
-    { backend: "flare"
-    , mainGist: "4f54d6dd213caa54d736ead597e17fee"
-    , extra_styling: """<link rel="stylesheet" href="css/flare.css">"""
-    , extra_body: fold
-        [ """<div id="controls"></div>"""
-        , """<div id="output"></div>"""
-        , """<div id="tests"></div>"""
-        , """<canvas id="canvas" width="800" height="600"></canvas>"""
-        ]
-    , compile: compile $ url <> "/flare"
-    , getBundle: getDefaultBundle $ url <> "/flare"
+    , compile: compile url
+    , getBundle: getDefaultBundle url
     }
 
 getBackendConfigFromString :: String -> String -> BackendConfig

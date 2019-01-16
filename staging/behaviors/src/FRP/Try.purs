@@ -2,14 +2,13 @@ module FRP.Try (defaultMain) where
 
 import Prelude
 
-import Control.Monad.Eff (Eff)
+import Effect (Effect)
 import Data.Foldable (for_)
-import FRP (FRP)
 import FRP.Behavior (Behavior, animate)
-import Graphics.Canvas (CANVAS, getCanvasElementById, getContext2D)
+import Graphics.Canvas (getCanvasElementById, getContext2D)
 import Graphics.Drawing (Drawing, render)
 
-defaultMain :: Behavior Drawing -> Eff (canvas :: CANVAS, frp :: FRP) Unit
+defaultMain :: Behavior Drawing -> Effect Unit
 defaultMain b = do
   canvas <- getCanvasElementById "canvas"
   for_ canvas \c -> do
