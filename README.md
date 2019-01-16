@@ -12,6 +12,7 @@
 ## start the server
 
 ```bash
+> ./build-psc-packages.sh
 > make server-build
 > make server-install
 > make server-run
