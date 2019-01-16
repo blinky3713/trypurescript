@@ -7,8 +7,6 @@ const plugins = [
   })
 ]
 
-console.log(plugins);
-
 module.exports = {
   mode: 'development',
   devtool: 'source-map',

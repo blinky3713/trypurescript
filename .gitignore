@@ -4,7 +4,6 @@
 .stack-work/
 output/
 .psc-package/
-dist/
 .cabal-sandbox/
 
 cabal.sandbox.config
